@@ -65,12 +65,12 @@ BuildDockerCoreImage() {
     VERSION=$2
 
     QEMU=$(GetQemuArch "$ARCH")
-    docker pull "${DOCKER_REPO}:${ARCH}-v${VERSION}" && CACHE_FROM="--cache-from=${DOCKER_REPO}:${ARCH}-v${VERSION}" || true
+    docker pull "${DOCKER_REPO}:${ARCH}-v${VERSION}" 2>/dev/null && CACHE_FROM="--cache-from ${DOCKER_REPO}:${ARCH}-v${VERSION}" || true
     docker build \
         --build-arg CERTBOT_VERSION="${VERSION}" \
         --build-arg TARGET_ARCH="${ARCH}" \
         --build-arg QEMU_ARCH="${QEMU}" \
-        "${CACHE_FROM}" \
+        ${CACHE_FROM} \
         -f "${DOCKERFILE_PATH}" \
         -t "${DOCKER_REPO}:${ARCH}-v${VERSION}" \
         .
@@ -84,13 +84,13 @@ BuildDockerPluginImage() {
     PLUGIN=$3
 
     QEMU=$(GetQemuArch "$ARCH")
-    docker pull "${DOCKER_REPO}:${ARCH}-v${VERSION}" && CACHE_FROM="--cache-from=${DOCKER_REPO}:${ARCH}-v${VERSION}" || true
+    docker pull "${DOCKER_REPO}:${ARCH}-v${VERSION}" 2>/dev/null && CACHE_FROM="--cache-from ${DOCKER_REPO}:${ARCH}-v${VERSION}" || true
     docker build \
         --build-arg CERTBOT_VERSION="${VERSION}" \
         --build-arg TARGET_ARCH="${ARCH}" \
         --build-arg QEMU_ARCH="${QEMU}" \
         --build-arg PLUGIN_NAME="${PLUGIN}" \
-        "${CACHE_FROM}" \
+        ${CACHE_FROM} \
         -f "${DOCKERFILE_PATH}" \
         -t "${DOCKER_REPO}:${ARCH}-v${VERSION}" \
         .
